@@ -1,0 +1,28 @@
+@import "tailwindcss";
+body {
+  background: linear-gradient(135deg, #0f172a, #020617);
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  
+}
+@keyframes gradientMove {
+  0% { background-position: 0% }
+  100% { background-position: 200% }
+}
+@keyframes particle {
+  0% {
+    transform: translateY(0px);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100px);
+    opacity: 0;
+  }
+}
+
+.animate-particle {
+  animation: particle linear infinite;
+}
