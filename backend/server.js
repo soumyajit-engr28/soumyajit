@@ -7,8 +7,7 @@ const app = express();
 app.use(express.json());   
 
 mongoose.connect(
-  'mongodb://shrirupstark_db_user:Shrirup%4004102006@ac-zxot96c-shard-00-00.buumgxc.mongodb.net:27017,ac-zxot96c-shard-00-01.buumgxc.mongodb.net:27017,ac-zxot96c-shard-00-02.buumgxc.mongodb.net:27017/gymApp?ssl=true&replicaSet=atlas-jbgdxa-shard-0&authSource=admin&appName=GymAppCluster'
-)
+  'mongodb://kaustavnag05_db_user:SGnHhWEwlyJg0UNH@ac-ldeiutr-shard-00-00.ktaocs4.mongodb.net:27017,ac-ldeiutr-shard-00-01.ktaocs4.mongodb.net:27017,ac-ldeiutr-shard-00-02.ktaocs4.mongodb.net:27017/?ssl=true&replicaSet=atlas-7q5nya-shard-0&authSource=admin&appName=Cluster0')
   .then(() => console.log('✅ MongoDB connected'))
   .catch(err => console.error('❌ MongoDB connection error:', err));
 

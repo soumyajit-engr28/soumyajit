@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import Input from "../components/input";
+import API from "../api";   // ✅ Axios helper
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -10,9 +11,10 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  // ✅ Handle Button Click
-  const handleNext = () => {
+  // ✅ Handle Signup
+  const handleSignup = async () => {
     if (!email || !password) {
       setError("⚠ Please enter email and password");
       return;
@@ -24,16 +26,29 @@ const Signup = () => {
     }
 
     setError("");
+    setLoading(true);
 
-    // (Optional) Save data
-    localStorage.setItem("user", JSON.stringify({ email, password }));
+    try {
+      // Call backend signup route
+      const res = await API.post("/signup", {
+        username: email.split("@")[0], // simple username from email
+        email,
+        password,
+      });
 
-    navigate("/details");
+      console.log(res.data); // "User created successfully"
+
+      // Navigate to details page after successful signup
+      navigate("/details");
+    } catch (err) {
+      setError(err.response?.data?.error || "Signup failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="h-screen w-full relative overflow-hidden text-white">
-
       {/* 🎥 Background */}
       <div
         className="absolute inset-0 bg-cover bg-center blur-[3px]"
@@ -53,7 +68,6 @@ const Signup = () => {
 
       {/* 💪 Content */}
       <div className="relative z-10 h-full flex items-center justify-center px-6">
-
         <motion.div
           initial={{ opacity: 0, y: 60, scale: 0.9 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -63,7 +77,6 @@ const Signup = () => {
           border border-white/20 
           rounded-2xl shadow-2xl"
         >
-
           {/* 🔥 Heading */}
           <h1 className="text-3xl md:text-4xl font-extrabold text-center 
           bg-gradient-to-r from-blue-400 via-indigo-400 to-cyan-400 
@@ -78,7 +91,7 @@ const Signup = () => {
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
-                setError(""); // clear error while typing
+                setError("");
               }}
             />
             <Input
@@ -101,8 +114,8 @@ const Signup = () => {
 
           {/* Button */}
           <button
-            onClick={handleNext}
-            disabled={!email || !password}
+            onClick={handleSignup}
+            disabled={loading}
             className="mt-6 w-full py-3 rounded-xl text-lg font-semibold 
             bg-gradient-to-r from-blue-500 to-cyan-400 
             shadow-lg shadow-blue-500/30
@@ -111,7 +124,7 @@ const Signup = () => {
             active:scale-95
             transition duration-300"
           >
-            Continue →
+            {loading ? "Creating..." : "Continue →"}
           </button>
 
           {/* 🔁 Back to Login */}
@@ -124,11 +137,8 @@ const Signup = () => {
               Login
             </span>
           </p>
-
         </motion.div>
       </div>
     </div>
   );
 };
-
-export default Signup;
